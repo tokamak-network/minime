@@ -29,7 +29,7 @@ import "./Controlled.sol";
 import "./TokenController.sol";
 
 contract ApproveAndCallFallBack {
-    function receiveApproval(address from, uint256 _amount, address _token, bytes _data) public;
+    function receiveApproval(address from, uint256 _amount, address _token, bytes memory _data) public;
 }
 
 /// @dev The actual token contract, the default controller is the msg.sender
@@ -104,9 +104,9 @@ contract MiniMeToken is Controlled {
         address _tokenFactory,
         address payable _parentToken,
         uint _parentSnapShotBlock,
-        string _tokenName,
+        string memory _tokenName,
         uint8 _decimalUnits,
-        string _tokenSymbol,
+        string memory  _tokenSymbol,
         bool _transfersEnabled
     ) public {
         tokenFactory = MiniMeTokenFactory(_tokenFactory);
@@ -251,7 +251,7 @@ contract MiniMeToken is Controlled {
     /// @param _spender The address of the contract able to transfer the tokens
     /// @param _amount The amount of tokens to be approved for transfer
     /// @return True if the function call was successful
-    function approveAndCall(address _spender, uint256 _amount, bytes _extraData
+    function approveAndCall(address _spender, uint256 _amount, bytes memory _extraData
     ) public returns (bool success) {
         require(approve(_spender, _amount));
 
@@ -342,9 +342,9 @@ contract MiniMeToken is Controlled {
     /// @param _transfersEnabled True if transfers are allowed in the clone
     /// @return The address of the new MiniMeToken Contract
     function createCloneToken(
-        string _cloneTokenName,
+        string memory _cloneTokenName,
         uint8 _cloneDecimalUnits,
-        string _cloneTokenSymbol,
+        string memory _cloneTokenSymbol,
         uint _snapshotBlock,
         bool _transfersEnabled
         ) public returns(address) {
@@ -543,9 +543,9 @@ contract MiniMeTokenFactory {
     function createCloneToken(
         address payable _parentToken,
         uint _snapshotBlock,
-        string _tokenName,
+        string memory _tokenName,
         uint8 _decimalUnits,
-        string _tokenSymbol,
+        string memory _tokenSymbol,
         bool _transfersEnabled
     ) public returns (MiniMeToken) {
         MiniMeToken newToken = new MiniMeToken(
