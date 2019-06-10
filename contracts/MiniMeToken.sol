@@ -100,7 +100,7 @@ contract MiniMeToken is Controlled {
     /// @param _decimalUnits Number of decimals of the new token
     /// @param _tokenSymbol Token Symbol for the new token
     /// @param _transfersEnabled If true, tokens will be able to be transferred
-    function MiniMeToken(
+    constructor (
         address _tokenFactory,
         address payable _parentToken,
         uint _parentSnapShotBlock,
