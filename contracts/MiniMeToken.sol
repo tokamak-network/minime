@@ -175,7 +175,7 @@ contract MiniMeToken is Controlled {
            require(parentSnapShotBlock < block.number);
 
            // Do not allow transfer to 0x0 or the token contract itself
-           require((_to != 0) && (_to != address(this)));
+           require((_to != address(0)) && (_to != address(this)));
 
            // If the amount being transfered is more than the balance of the
            //  account the transfer throws
@@ -258,7 +258,7 @@ contract MiniMeToken is Controlled {
         ApproveAndCallFallBack(_spender).receiveApproval(
             msg.sender,
             _amount,
-            this,
+            address(this),
             _extraData
         );
 
@@ -290,7 +290,7 @@ contract MiniMeToken is Controlled {
         //  this token
         if ((balances[_owner].length == 0)
             || (balances[_owner][0].fromBlock > _blockNumber)) {
-            if (address(parentToken) != 0) {
+            if (address(parentToken) != address(0)) {
                 return parentToken.balanceOfAt(_owner, min(_blockNumber, parentSnapShotBlock));
             } else {
                 // Has no parent
@@ -315,7 +315,7 @@ contract MiniMeToken is Controlled {
         //  token at this block number.
         if ((totalSupplyHistory.length == 0)
             || (totalSupplyHistory[0].fromBlock > _blockNumber)) {
-            if (address(parentToken) != 0) {
+            if (address(parentToken) != address(0)) {
                 return parentToken.totalSupplyAt(min(_blockNumber, parentSnapShotBlock));
             } else {
                 return 0;
@@ -350,7 +350,7 @@ contract MiniMeToken is Controlled {
         ) public returns(address) {
         if (_snapshotBlock == 0) _snapshotBlock = block.number;
         MiniMeToken cloneToken = tokenFactory.createCloneToken(
-            this,
+            address(this),
             _snapshotBlock,
             _cloneTokenName,
             _cloneDecimalUnits,
@@ -466,7 +466,7 @@ contract MiniMeToken is Controlled {
     /// @return True if `_addr` is a contract
     function isContract(address _addr) constant internal returns(bool) {
         uint size;
-        if (_addr == 0) return false;
+        if (_addr == address(0)) return false;
         assembly {
             size := extcodesize(_addr)
         }
@@ -495,13 +495,13 @@ contract MiniMeToken is Controlled {
     /// @param _token The address of the token contract that you want to recover
     ///  set to 0 in case you want to extract ether.
     function claimTokens(address payable _token) public onlyController {
-        if (_token == 0x0) {
-            controller.transfer(this.balance);
+        if (_token == address(0)) {
+            controller.transfer(address(this).balance);
             return;
         }
 
         MiniMeToken token = MiniMeToken(_token);
-        uint balance = token.balanceOf(this);
+        uint balance = token.balanceOf(address(this));
         token.transfer(controller, balance);
         emit ClaimedTokens(_token, controller, balance);
     }
@@ -549,7 +549,7 @@ contract MiniMeTokenFactory {
         bool _transfersEnabled
     ) public returns (MiniMeToken) {
         MiniMeToken newToken = new MiniMeToken(
-            this,
+            address(this),
             _parentToken,
             _snapshotBlock,
             _tokenName,
