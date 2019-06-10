@@ -102,7 +102,7 @@ contract MiniMeToken is Controlled {
     /// @param _transfersEnabled If true, tokens will be able to be transferred
     function MiniMeToken(
         address _tokenFactory,
-        address _parentToken,
+        address payable _parentToken,
         uint _parentSnapShotBlock,
         string _tokenName,
         uint8 _decimalUnits,
@@ -494,7 +494,7 @@ contract MiniMeToken is Controlled {
     ///  sent tokens to this contract.
     /// @param _token The address of the token contract that you want to recover
     ///  set to 0 in case you want to extract ether.
-    function claimTokens(address _token) public onlyController {
+    function claimTokens(address payable _token) public onlyController {
         if (_token == 0x0) {
             controller.transfer(this.balance);
             return;
@@ -541,7 +541,7 @@ contract MiniMeTokenFactory {
     /// @param _transfersEnabled If true, tokens will be able to be transferred
     /// @return The address of the new token contract
     function createCloneToken(
-        address _parentToken,
+        address payable _parentToken,
         uint _snapshotBlock,
         string _tokenName,
         uint8 _decimalUnits,
