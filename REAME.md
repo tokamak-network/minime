@@ -1,0 +1,1 @@
+# MiniMe Token Contract
