@@ -1,5 +1,5 @@
-const { BN, ether, constants, expectRevert } = require('openzeppelin-test-helpers');
-const { expect } = require('chai');
+const { BN, constants } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
 
 const MiniMeTokenFactory = artifacts.require('MiniMeTokenFactory');
 const MiniMeToken = artifacts.require('MiniMeToken');
@@ -11,10 +11,10 @@ contract('MiniMeToken', function ([controller, ...accounts]) {
   const b = [];
 
   before(async function () {
-    let tokenFactory = await MiniMeTokenFactory.new({ from: controller });
+    const tokenFactory = await MiniMeTokenFactory.new({ from: controller });
     this.miniMeToken = await MiniMeToken.new(
       tokenFactory.address,
-      constants.ZERO_ADDRESS,
+      ZERO_ADDRESS,
       0,
       'MiniMe Test Token',
       18,
@@ -67,7 +67,7 @@ contract('MiniMeToken', function ([controller, ...accounts]) {
     (await this.miniMeToken.balanceOfAt(accounts[2], 0)).should.be.bignumber.equal(new BN(0));
   });
   
-  it('should Destroy 3 tokens from 1 and 1 from 2', async function () {
+  it('should destroy 3 tokens from 1 and 1 from 2', async function () {
     await this.miniMeToken.destroyTokens(accounts[1], new BN(3), { from: controller, gas: 200000 });
 
     b[4] = await web3.eth.getBlockNumber();
